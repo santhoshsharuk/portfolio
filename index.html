@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santhosh Sharuk | SHARUK.OS</title>
+    <style>
+        /* --- Core Styles --- */
+        :root {
+            --background: #1a1a1a;
+            --foreground: #e0e0e0;
+            --primary: #4CAF50; /* A classic green terminal color */
+            --command: #8ab4f8; /* A nice blue for commands */
+            --font: 'Fira Code', 'Source Code Pro', monospace;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: var(--background);
+            color: var(--foreground);
+            font-family: var(--font);
+            font-size: 16px;
+        }
+
+        /* --- Terminal Container --- */
+        #terminal {
+            height: 100%;
+            padding: 15px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            cursor: text;
+        }
+
+        /* --- Output Area --- */
+        #output {
+            white-space: pre-wrap; /* Allows text to wrap */
+            word-wrap: break-word;
+        }
+        
+        .prompt-line {
+            display: flex;
+            align-items: center;
+        }
+
+        .prompt-symbol {
+            color: var(--primary);
+            margin-right: 8px;
+        }
+
+        /* --- Input Field --- */
+        #input-line {
+            display: flex;
+        }
+
+        #input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: var(--foreground);
+            font-family: var(--font);
+            font-size: 1em;
+            outline: none;
+            padding: 0;
+        }
+        
+        /* --- Specific Text Styles --- */
+        .command-output {
+            color: var(--command);
+        }
+
+        .response-text {
+            color: var(--foreground);
+        }
+
+        .system-message {
+            color: var(--primary);
+        }
+
+        .error-message {
+            color: #f44336; /* Red for errors */
+        }
+        
+        a {
+            color: #64b5f6; /* A light blue for links */
+            text-decoration: underline;
+        }
+
+        /* Blinking Cursor Effect */
+        #input::after {
+            content: '_';
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            from, to {
+                color: transparent;
+            }
+            50% {
+                color: var(--foreground);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="terminal">
+        <div id="output"></div>
+        <div id="input-line" class="prompt-line">
+            <span class="prompt-symbol">Santhosh Sharuk [~] $</span>
+            <input type="text" id="input" autofocus>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const output = document.getElementById('output');
+            const input = document.getElementById('input');
+            const terminal = document.getElementById('terminal');
+
+            const projects = {
+                "idea_generator_pro.py": {
+                    description: "This tool was built using Google's Gemini to generate unique project ideas from a single keyword. It turned a 2-hour brainstorming session into a 2-minute task.",
+                    liveDemo: "#", // Replace with your actual link
+                    sourceCode: "#" // Replace with your GitHub link
+                },
+                "code_genie.js": {
+                    description: "An interactive web tool that leverages AI to help developers write boilerplate code more efficiently. Built with JavaScript and the OpenAI API.",
+                    liveDemo: "#",
+                    sourceCode: "#"
+                },
+                "creative_writer_ai.exe": {
+                    description: "A desktop application that acts as a creative partner for writers, suggesting plot twists, character names, and dialogue. It's a fun exploration of creative AI.",
+                    liveDemo: "#",
+                    sourceCode: "#"
+                }
+            };
+
+            const commands = {
+                help: `Available commands:
+  <span class="command-output">whoami</span>         - Displays my professional identity.
+  <span class="command-output">ls -projects</span>   - Lists all my featured projects.
+  <span class="command-output">run &lt;project&gt;</span>  - Executes a project to show details.
+  <span class="command-output">contact</span>        - Shows my contact information.
+  <span class="command-output">clear</span>          - Clears the terminal screen.`,
+
+                whoami: `> Identity: Santhosh Sharuk
+> Role: AI Developer | Creative Technologist
+> Mission: To leverage generative AI (Gemini, ChatGPT, Copilot) to build things that are novel, useful, or just plain weird. I believe the best ideas are one good prompt away.`,
+
+                'ls -projects': `> idea_generator_pro.py
+> code_genie.js
+> creative_writer_ai.exe`,
+                
+                contact: `You can reach me via:
+> Email:   <a href="mailto:your_email@example.com">your_email@example.com</a>
+> LinkedIn: <a href="#" target="_blank">linkedin.com/in/your_profile</a>
+> GitHub:   <a href="#" target="_blank">github.com/your_username</a>`,
+
+                clear: ''
+            };
+
+            // Display welcome message
+            printToTerminal(`<span class="system-message">SHARUK.OS v2.5 now loading...</span>`);
+            printToTerminal(`<span class="system-message">Connected to server.</span>`);
+            printToTerminal(`Welcome, user. Type '<span class="command-output">help</span>' to begin.`);
+            printToTerminal(''); // Add a blank line for spacing
+
+            // --- Event Listeners ---
+
+            // Main command handler
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const command = input.value.trim();
+                    if (command) {
+                        // Display the entered command
+                        printToTerminal(`<span class="prompt-symbol">Santhosh Sharuk [~] $</span> ${command}`);
+                        
+                        // Process the command
+                        processCommand(command);
+
+                        input.value = ''; // Clear the input
+                    }
+                }
+            });
+
+            // Keep the input focused
+            terminal.addEventListener('click', () => {
+                input.focus();
+            });
+
+
+            // --- Functions ---
+
+            function processCommand(command) {
+                const [cmd, ...args] = command.split(' ');
+
+                if (cmd === 'run' && args.length > 0) {
+                    const projectName = args[0];
+                    if (projects[projectName]) {
+                        const project = projects[projectName];
+                        printToTerminal(`> [Executing project...]`);
+                        printToTerminal(`> ${project.description}`);
+                        printToTerminal(`>`);
+                        printToTerminal(`> Launching live demo in new tab... <a href="${project.liveDemo}" target="_blank">[project link]</a>`);
+                        printTo_Terminal(`> View source code... <a href="${project.sourceCode}" target="_blank">[github link]</a>`);
+                    } else {
+                        printToTerminal(`<span class="error-message">Error: Project '${projectName}' not found. Type 'ls -projects' to see a list of available projects.</span>`);
+                    }
+                } else if (commands[command]) {
+                    if (command === 'clear') {
+                        output.innerHTML = '';
+                    } else {
+                        printToTerminal(commands[command]);
+                    }
+                } else {
+                    printToTerminal(`<span class="error-message">Command not found: ${command}. Type 'help' for a list of commands.</span>`);
+                }
+                
+                scrollToBottom();
+            }
+
+            function printToTerminal(text) {
+                const line = document.createElement('div');
+                line.innerHTML = text;
+                output.appendChild(line);
+            }
+
+            function scrollToBottom() {
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+
+        });
+    </script>
+</body>
+</html>
