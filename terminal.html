@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santhosh Sharuk | AI Innovator</title>
+    
+    <!-- Google Fonts: Fira Code for that classic terminal feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Typed.js CDN for the typing animation -->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+    <style>
+        /* --- CSS RESET --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- STYLES --- */
+        :root {
+            --background: #1a1b26;
+            --foreground: #c0caf5;
+            --prompt: #a9b1d6;
+            --green: #9ece6a;
+            --cyan: #7dcfff;
+            --blue: #7aa2f7;
+            --red: #f7768e;
+            --yellow: #e0af68;
+            --font: 'Fira Code', monospace;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+            font-family: var(--font);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        #terminal {
+            height: 100%;
+            width: 100%;
+            padding: 20px;
+            overflow-y: auto;
+            cursor: text;
+        }
+
+        .output-line {
+            white-space: pre-wrap; /* Allows text to wrap */
+            word-wrap: break-word; /* Breaks long words if necessary */
+        }
+        
+        .output-line a {
+            color: var(--yellow);
+            text-decoration: none;
+        }
+
+        .output-line a:hover {
+            text-decoration: underline;
+        }
+
+        .prompt-line {
+            display: flex;
+            align-items: center;
+        }
+
+        .prompt-symbol {
+            color: var(--prompt);
+            margin-right: 8px;
+        }
+
+        #command-input {
+            background: transparent;
+            border: none;
+            color: var(--foreground);
+            font-family: var(--font);
+            font-size: 14px;
+            flex-grow: 1;
+            outline: none;
+        }
+
+        .cursor {
+            width: 8px;
+            height: 1.2em;
+            background-color: var(--foreground);
+            display: inline-block;
+            animation: blink 1s steps(2, start) infinite;
+        }
+
+        @keyframes blink {
+            to {
+                visibility: hidden;
+            }
+        }
+        
+        /* Command specific colors */
+        .color-green { color: var(--green); }
+        .color-cyan { color: var(--cyan); }
+        .color-blue { color: var(--blue); }
+        .color-red { color: var(--red); }
+        .color-yellow { color: var(--yellow); }
+
+    </style>
+</head>
+<body>
+
+    <div id="terminal">
+        <div id="output"></div>
+        <div class="prompt-line">
+            <span class="prompt-symbol">guest@santhosh-sharuk.ai:~$</span>
+            <input type="text" id="command-input" autocomplete="off" autofocus>
+            <span class="cursor"></span>
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const terminal = document.getElementById('terminal');
+    const output = document.getElementById('output');
+    const input = document.getElementById('command-input');
+
+    let commandHistory = [];
+    let historyIndex = -1;
+
+    const commands = {
+        'start': {
+            description: 'Initialize the portfolio display.',
+            execute: () => displayWelcomeMessage()
+        },
+        'help': {
+            description: 'Lists all available commands.',
+            execute: () => {
+                let helpText = `<span class="color-cyan">Available Commands:</span>\n`;
+                for (const cmd in commands) {
+                    helpText += `<span class="color-green">${cmd.padEnd(10)}</span> - ${commands[cmd].description}\n`;
+                }
+                return helpText;
+            }
+        },
+        'about': {
+            description: 'Get to know more about me.',
+            execute: () => `My name is Santhosh Sharuk. I am an AI Innovator and Digital Experience Creator.
+I specialize in leveraging cutting-edge AI technologies like Large Language Models to build intelligent,
+user-centric solutions across various platforms, from web apps to IoT devices. 
+My passion lies at the intersection of human-computer interaction and artificial intelligence.`
+        },
+        'skills': {
+            description: 'View my technical skills.',
+            execute: () => `<span class="color-cyan">--- Technical Skills ---</span>
+<span class="color-green">* AI/ML:</span>        Large Language Models (GPT, Gemini), Neural Networks, TensorFlow
+<span class="color-green">* Frontend:</span>      JavaScript, React, HTML5, CSS3, Svelte
+<span class="color-green">* Backend:</span>       Node.js, Python, Express, REST & GraphQL APIs
+<span class="color-green">* Databases:</span>     MongoDB, PostgreSQL, Firebase
+<span class="color-green">* DevOps:</span>        Docker, Git, CI/CD, AWS`
+        },
+        'projects': {
+            description: 'See some of my featured projects.',
+            execute: () => `<span class="color-cyan">--- Featured Projects ---</span>
+<span class="color-yellow">1. Project Sentient UI</span>
+   An adaptive UI framework that uses machine learning to personalize the user experience in real-time.
+   <a href="#" target="_blank">[view-source]</a>
+
+<span class="color-yellow">2. DevGenius AI</span>
+   A suite of AI-powered developer tools that assist in code generation, debugging, and optimization.
+   <a href="#" target="_blank">[view-source]</a>
+
+<span class="color-yellow">3. HomeAI Operating System</span>
+   A smart home OS with a conversational AI that learns user preferences to automate and optimize device usage.
+   <a href="#" target="_blank">[view-source]</a>`
+        },
+        'contact': {
+            description: 'Find out how to get in touch.',
+            execute: () => `<span class="color-cyan">--- Contact Me ---</span>
+<span class="color-green">Email:</span>    <a href="mailto:santhosh.sharuk@example.com">santhosh.sharuk@example.com</a>
+<span class="color-green">LinkedIn:</span> <a href="https://www.linkedin.com/in/santhoshsharuk" target="_blank">linkedin.com/in/santhoshsharuk</a>
+<span class="color-green">GitHub:</span>   <a href="https://github.com/santhoshsharuk" target="_blank">github.com/santhoshsharuk</a>`
+        },
+        'info': {
+            description: 'Display a summary of system and user info.',
+            execute: () => {
+                const asciiArt = `
+<span class="color-blue">      .:'        santhoshsharuk@portfolio</span>
+<span class="color-blue">     ::::'       --------------------------</span>
+<span class="color-blue">    :::::'       </span><span class="color-cyan">OS:</span>       Web-Based Terminal OS
+<span class="color-blue">    :::'         </span><span class="color-cyan">Host:</span>     Static Universal Hosting
+<span class="color-blue">   :::'          </span><span class="color-cyan">Kernel:</span>   5.0 JS (ES2023)
+<span class="color-blue">  :::'           </span><span class="color-cyan">Uptime:</span>   ${Math.floor(performance.now() / 1000)}s
+<span class="color-blue"> .::'            </span><span class="color-cyan">Shell:</span>    portfolio-sh v1.0
+<span class="color-blue"> :.              </span><span class="color-cyan">User:</span>     <span class="color-yellow">Santhosh Sharuk</span>
+<span class="color-blue"> ::              </span><span class="color-cyan">Title:</span>    <span class="color-yellow">AI Innovator</span>
+`;
+                return asciiArt;
+            }
+        },
+        'clear': {
+            description: 'Clears the terminal screen.',
+            execute: () => {
+                output.innerHTML = '';
+                return '';
+            }
+        }
+    };
+    
+    const displayWelcomeMessage = () => {
+        const welcomeBanner = `
+<span class="color-green">  _________                           .__   </span>
+<span class="color-green"> /   _____/____   ___________   ____ |  |  </span>
+<span class="color-green"> \\_____  \\\\__  \\  \\_  __ \\__  \\ /    \\|  |  </span>
+<span class="color-green"> /        \\/ __ \\_ |  | \\// __ \\|   |  \\  |__</span>
+<span class="color-green">/_______  (____  / |__|  (____  /___|  /____/</span>
+<span class="color-green">        \\/     \\/             \\/     \\/     </span>
+`;
+        appendOutput(welcomeBanner, false);
+        
+        const welcomeText = `Welcome to the portfolio of <span class="color-yellow">Santhosh Sharuk</span>.
+I am an <span class="color-cyan">AI Innovator & Digital Experience Creator</span>.
+Type '<span class="color-green">help</span>' to see a list of available commands.`;
+        
+        const typedContainer = document.createElement('div');
+        typedContainer.className = 'output-line';
+        output.appendChild(typedContainer);
+
+        new Typed(typedContainer, {
+            strings: [welcomeText.replace(/\n/g, '<br>')],
+            typeSpeed: 20,
+            showCursor: false,
+            onComplete: () => {
+                input.focus();
+            }
+        });
+    };
+
+    const processCommand = (command) => {
+        if (command.trim() === '') return;
+
+        commandHistory.unshift(command);
+        historyIndex = -1;
+
+        const commandOutput = commands[command] ? commands[command].execute() : `<span class="color-red">Command not found: ${command}</span>. Type 'help' for a list of commands.`;
+        appendOutput(commandOutput);
+    };
+
+    const appendOutput = (html, isCommandResult = true) => {
+        const line = document.createElement('div');
+        line.className = 'output-line';
+        line.innerHTML = html;
+        output.appendChild(line);
+        if (isCommandResult) {
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+    };
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const command = input.value;
+            const promptLine = `<div class="prompt-line"><span class="prompt-symbol">guest@santhosh-sharuk.ai:~$</span><span>${command}</span></div>`;
+            appendOutput(promptLine, false);
+            input.value = '';
+            processCommand(command.toLowerCase());
+        } else if (e.key === 'ArrowUp') {
+            if (historyIndex < commandHistory.length - 1) {
+                historyIndex++;
+                input.value = commandHistory[historyIndex];
+            }
+        } else if (e.key === 'ArrowDown') {
+            if (historyIndex > 0) {
+                historyIndex--;
+                input.value = commandHistory[historyIndex];
+            } else {
+                 historyIndex = -1;
+                 input.value = "";
+            }
+        }
+    });
+
+    terminal.addEventListener('click', () => {
+        input.focus();
+    });
+
+    // Start the experience
+    displayWelcomeMessage();
+});
+</script>
+
+</body>
+</html>
