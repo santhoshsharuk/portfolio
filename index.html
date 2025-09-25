@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Santhosh Sharuk | Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.comcom/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
-            --text-light: #ffffff;
-            --text-dark: #333333;
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --glass-shadow: rgba(0, 0, 0, 0.1);
+            --bg-color: #0d0c0f;
+            --card-bg-color: rgba(255, 255, 255, 0.03);
+            --primary-text-color: #f1f5f9;
+            --secondary-text-color: #a1a1aa;
+            --accent-color: #c026d3; /* Electric Amethyst */
+            --accent-color-glow: rgba(192, 38, 211, 0.5);
+            --border-color: rgba(255, 255, 255, 0.1);
         }
 
         * {
@@ -22,310 +22,351 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--text-light);
+            background: linear-gradient(-45deg, #0d0c0f, #1e1b4b, #0d0c0f, #4c1d95);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--primary-text-color);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 2rem;
             overflow-x: hidden;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=');
-            opacity: 0.15;
-            pointer-events: none;
         }
 
         .container {
             width: 90%;
-            max-width: 1200px;
-            padding: 2rem;
+            max-width: 1100px;
+            position: relative;
         }
 
-        .selector-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px 0 var(--glass-shadow);
-            padding: 3rem;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            transition: all 0.3s ease;
+        /* --- Animations --- */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes textFocusIn {
+            0% {
+                filter: blur(12px);
+                opacity: 0;
+            }
+            100% {
+                filter: blur(0px);
+                opacity: 1;
+            }
+        }
+
+        .header-content {
             text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeIn 0.8s ease-out;
         }
 
-        h1 {
-            font-size: 2.5rem;
+        .header-content h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.2;
             margin-bottom: 1rem;
-            background: linear-gradient(to right, #ffffff, #d6d6d6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            transform: translateZ(10px);
+            color: var(--primary-text-color);
+            animation: textFocusIn 1.2s cubic-bezier(0.550, 0.085, 0.680, 0.530);
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 3rem;
-            color: rgba(255, 255, 255, 0.8);
+        .header-content p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--secondary-text-color);
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out 0.5s backwards;
         }
 
         .roles-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-bottom: 3rem;
         }
 
         .role-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 1.5rem;
+            background: var(--card-bg-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transform: translateZ(5px);
-            position: relative;
             overflow: hidden;
+            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+            animation: fadeIn 0.8s ease-out backwards;
         }
+        
+        /* Stagger the animation for each card */
+        .role-card:nth-child(1) { animation-delay: 0.7s; }
+        .role-card:nth-child(2) { animation-delay: 0.8s; }
+        .role-card:nth-child(3) { animation-delay: 0.9s; }
+        .role-card:nth-child(4) { animation-delay: 1.0s; }
+        .role-card:nth-child(5) { animation-delay: 1.1s; }
+        .role-card:nth-child(6) { animation-delay: 1.2s; }
 
-        .role-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: translateX(-100%);
-            transition: all 0.6s ease;
-        }
 
         .role-card:hover {
-            transform: translateZ(15px) scale(1.05);
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .role-card:hover::before {
-            transform: translateX(100%);
+            transform: translateY(-10px) scale(1.03);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 25px var(--accent-color-glow);
         }
 
         .icon {
             font-size: 2.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.4s ease;
+        }
+        
+        .role-card:hover .icon {
+            transform: rotate(-10deg) scale(1.1);
         }
 
-        .role-card h3 {
+        .card-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 0.5rem;
         }
 
-        .role-card p {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
+        .card-title h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-text-color);
         }
 
-        .custom-search {
-            margin-top: 2rem;
+        .card-title .arrow {
+            font-size: 1.5rem;
+            color: var(--primary-text-color);
+            transform: translateX(-10px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .role-card:hover .arrow {
+            transform: translateX(0);
+            opacity: 1;
+            color: var(--accent-color);
+        }
+
+        .role-card p {
+            font-size: 1rem;
+            color: var(--secondary-text-color);
+            line-height: 1.6;
+        }
+
+        .search-section {
+            margin-top: 5rem;
+            text-align: center;
+            padding: 3rem;
+            background: var(--card-bg-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            animation: fadeIn 0.8s ease-out 1.3s backwards;
+        }
+
+        .search-section p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-text-color);
         }
 
         .search-form {
             display: flex;
             gap: 1rem;
-            margin-top: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .search-input {
             flex: 1;
-            padding: 1rem;
-            border-radius: 10px;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-light);
+            padding: 0.875rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
             font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input::placeholder {
+            color: var(--secondary-text-color);
         }
 
         .search-input:focus {
             outline: none;
-            border-color: #ffffff;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px var(--accent-color-glow);
         }
 
         .search-btn {
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: var(--text-light);
-            border: none;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            background: var(--accent-color);
+            color: white;
+            border: 1px solid var(--accent-color);
             cursor: pointer;
-            transition: all 0.3s ease;
             font-family: 'Poppins', sans-serif;
             font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
 
         .search-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px var(--accent-color-glow);
         }
 
+        /* Responsive design */
         @media (max-width: 768px) {
-            .container {
+            body {
                 padding: 1rem;
             }
-            
-            .selector-card {
-                padding: 2rem;
+
+            .search-form {
+                flex-direction: column;
             }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
-            }
-            
-            .roles-grid {
-                grid-template-columns: 1fr;
+            .header-content {
+                padding: 1rem;
             }
         }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <div class="selector-card" id="selector">
-            <h1>Welcome to Santhosh Sharuk's Universe</h1>
-            <p class="subtitle">Choose your path to explore my portfolio in a way that speaks to you</p>
-            
-            <div class="roles-grid">
-                <div class="role-card" data-page="uiux.html">
-                    <div class="icon">🎨</div>
+        <header class="header-content">
+            <h1>Santhosh Sharuk's Universe</h1>
+            <p>A multi-disciplinary developer and designer. Choose a path to explore my work.</p>
+        </header>
+
+        <main class="roles-grid">
+            <div class="role-card" data-page="uiux.html">
+                <div class="icon">🎨</div>
+                <div class="card-title">
                     <h3>UI/UX Designer</h3>
-                    <p>Explore my design thinking, user-centered approaches, and beautiful interfaces</p>
+                    <span class="arrow">→</span>
                 </div>
-                
-                <div class="role-card" data-page="frontend.html">
-                    <div class="icon">💻</div>
-                    <h3>Frontend Developer</h3>
-                    <p>See my code, interactive web experiences, and frontend development skills</p>
-                </div>
-                
-                <div class="role-card" data-page="backend.html">
-                    <div class="icon">🔧</div>
-                    <h3>Backend Developer</h3>
-                    <p>Discover my server-side skills, APIs, databases, and system architecture</p>
-                </div>
-                
-                <div class="role-card" data-page="terminal.html">
-                    <div class="icon">⌨️</div>
-                    <h3>Terminal Explorer</h3>
-                    <p>Interact with my Linux/terminal-based portfolio for a geekier experience</p>
-                </div>
-                
-                <div class="role-card" data-page="ai.html">
-                    <div class="icon">🤖</div>
-                    <h3>AI Enthusiast</h3>
-                    <p>Explore my AI projects, machine learning models, and intelligent systems</p>
-                </div>
-                
-                <div class="role-card" data-page="company.html">
-                    <div class="icon">🏢</div>
-                    <h3>Company/Founder</h3>
-                    <p>Learn how I can help your company with innovative solutions and strategic thinking</p>
-                </div>
-                
-                <div class="role-card" data-page="product.html">
-                    <div class="icon">📱</div>
-                    <h3>Product Developer</h3>
-                    <p>See how I approach product development, from idea to execution</p>
-                </div>
+                <p>User-centered approaches and beautiful, intuitive interfaces.</p>
             </div>
             
-            <div class="custom-search">
-                <p>Looking for something specific?</p>
-                <form class="search-form" id="search-form">
-                    <input type="text" class="search-input" id="search-input" placeholder="e.g., mobile app development, AI projects...">
-                    <button type="submit" class="search-btn">Search</button>
-                </form>
+            <div class="role-card" data-page="frontend.html">
+                <div class="icon">💻</div>
+                <div class="card-title">
+                    <h3>Frontend Developer</h3>
+                    <span class="arrow">→</span>
+                </div>
+                <p>Interactive web experiences and pixel-perfect development skills.</p>
             </div>
-        </div>
+            
+            <div class="role-card" data-page="backend.html">
+                <div class="icon">🔧</div>
+                <div class="card-title">
+                    <h3>Backend Developer</h3>
+                    <span class="arrow">→</span>
+                </div>
+                <p>Server-side logic, robust APIs, and scalable system architecture.</p>
+            </div>
+            
+            <div class="role-card" data-page="terminal.html">
+                <div class="icon">⌨️</div>
+                <div class="card-title">
+                    <h3>Terminal Explorer</h3>
+                    <span class="arrow">→</span>
+                </div>
+                <p>A unique, command-line based portfolio for a geekier experience.</p>
+            </div>
+            
+            <div class="role-card" data-page="ai.html">
+                <div class="icon">🤖</div>
+                <div class="card-title">
+                    <h3>AI Enthusiast</h3>
+                    <span class="arrow">→</span>
+                </div>
+                <p>AI projects, machine learning models, and intelligent systems.</p>
+            </div>
+            
+            <div class="role-card" data-page="product.html">
+                <div class="icon">📱</div>
+                <div class="card-title">
+                    <h3>Product Developer</h3>
+                    <span class="arrow">→</span>
+                </div>
+                <p>My approach to product development, from initial idea to final execution.</p>
+            </div>
+        </main>
+
+        <section class="search-section">
+            <p>Looking for something specific?</p>
+            <form class="search-form" id="search-form">
+                <input type="text" class="search-input" id="search-input" placeholder="e.g., mobile apps, AI projects...">
+                <button type="submit" class="search-btn">Search</button>
+            </form>
+        </section>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 3D hover effect
-            const selector = document.getElementById('selector');
-            
-            document.addEventListener('mousemove', function(e) {
-                const { left, top, width, height } = selector.getBoundingClientRect();
-                const x = e.clientX - left;
-                const y = e.clientY - top;
-                
-                const centerX = width / 2;
-                const centerY = height / 2;
-                
-                const angleX = (y - centerY) / 30;
-                const angleY = (centerX - x) / 30;
-                
-                selector.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateZ(10px)`;
-            });
-            
-            // Reset transform when mouse leaves
-            document.addEventListener('mouseleave', function() {
-                selector.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(10px)';
-            });
-            
-            // Role card navigation
+            // --- Role Card Navigation ---
             const roleCards = document.querySelectorAll('.role-card');
             roleCards.forEach(card => {
                 card.addEventListener('click', function() {
                     const targetPage = this.getAttribute('data-page');
+                    // Add a class for a potential exit animation if desired
+                    document.body.style.transition = 'opacity 0.3s ease-in-out';
+                    document.body.style.opacity = '0';
                     
-                    // Animation before navigation
-                    this.style.transform = 'scale(0.95)';
                     setTimeout(() => {
                         window.location.href = targetPage;
                     }, 300);
                 });
             });
             
-            // Custom search form
+            // --- Custom Search Form ---
             const searchForm = document.getElementById('search-form');
             searchForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const searchInput = document.getElementById('search-input').value.toLowerCase();
                 
-                // Simple keyword matching to determine best page
                 let targetPage = 'frontend.html'; // Default
                 
-                if (searchInput.includes('design') || searchInput.includes('ui') || searchInput.includes('ux') || searchInput.includes('interface')) {
+                if (searchInput.includes('design') || searchInput.includes('ui') || searchInput.includes('ux')) {
                     targetPage = 'uiux.html';
-                } else if (searchInput.includes('front') || searchInput.includes('web') || searchInput.includes('html') || searchInput.includes('css') || searchInput.includes('javascript')) {
+                } else if (searchInput.includes('front') || searchInput.includes('web') || searchInput.includes('javascript')) {
                     targetPage = 'frontend.html';
-                } else if (searchInput.includes('back') || searchInput.includes('server') || searchInput.includes('api') || searchInput.includes('database')) {
+                } else if (searchInput.includes('back') || searchInput.includes('server') || searchInput.includes('api')) {
                     targetPage = 'backend.html';
-                } else if (searchInput.includes('terminal') || searchInput.includes('linux') || searchInput.includes('command') || searchInput.includes('shell')) {
+                } else if (searchInput.includes('terminal') || searchInput.includes('linux') || searchInput.includes('shell')) {
                     targetPage = 'terminal.html';
-                } else if (searchInput.includes('ai') || searchInput.includes('machine') || searchInput.includes('learning') || searchInput.includes('intelligence')) {
+                } else if (searchInput.includes('ai') || searchInput.includes('machine learning')) {
                     targetPage = 'ai.html';
-                } else if (searchInput.includes('company') || searchInput.includes('business') || searchInput.includes('founder') || searchInput.includes('startup')) {
-                    targetPage = 'company.html';
-                } else if (searchInput.includes('product') || searchInput.includes('development') || searchInput.includes('app')) {
+                } else if (searchInput.includes('product') || searchInput.includes('app')) {
                     targetPage = 'product.html';
                 }
                 
-                // Navigate to the selected page
                 window.location.href = targetPage;
             });
         });
